@@ -1,25 +1,29 @@
-console.log("Let's get this party started!");
-
 let giphyForm = document.querySelector('#giphyForm')
-let submitBtn = document.querySelector('submitBtn')
+let submitBtn = document.querySelector('#submitBtn')
+let removeBtn = document.querySelector('#removeBtn')
 
 giphyForm.addEventListener('submit', function(event){
     event.preventDefault();
-    console.log('it is working')
+    let searchInput = document.querySelector('input[type="text"]')
+    giphy(searchInput.value)
 })
 
-// api.giphy.com/v1/gifs/search
-
-// http://api.giphy.com/v1/gifs/search?q=hilarious&api_key=MhAodEJIJxQMxW9XqxKjyXfNYdLoOIym
-
-async function giphy() {
-    const response = await axios.get('http://api.giphy.com/v1/gifs/search?q=hilarious&api_key=MhAodEJIJxQMxW9XqxKjyXfNYdLoOIym', {params: {limit: 1}})
-    for(let gif of response.data.data) {
-        const newImg = document.createElement('img');
-        newImg.src = gif.url
-        document.body.append(newImg);
+removeBtn.addEventListener('click', function(event){
+    let allDivs = document.querySelectorAll('div')
+    // allDivs[0].innerHTML = '';
+    for (let div of allDivs){
+        div.parentNode.removeChild(div)
     }
+    
+})
+
+async function giphy(search) {
+    const response = await axios.get('http://api.giphy.com/v1/gifs/random', {params: {api_key: 'MhAodEJIJxQMxW9XqxKjyXfNYdLoOIym', tag: search}})
+        const newImg = document.createElement('img');
+        newImg.src = response.data.data.images.original.url
+        const newDiv = document.createElement('div')
+        document.body.append(newDiv)
+        newDiv.append(newImg);
 }
-giphy();
 
 
